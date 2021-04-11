@@ -1,0 +1,21 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta lang="en-GB">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/styles.css?v<?php echo(date("YmdH")); ?>"/>
+
+    <title>Ants!!!</title>
+</head>
+<body>
+    <div class="content">
+        <h1>Ants colony simulation</h1>
+
+        <canvas id="myCanvas" width="1400px" height="900px"></canvas>
+    </div>
+
+    <script src="all.min.js"></script>
+</body>
+</html>
