@@ -1,11 +1,8 @@
 'use strict';
 
-// var cssMinify       = require('gulp-csso');
 var concat          = require('gulp-concat');
 var gulp            = require('gulp');
-// var gutil           = require('gulp-util');
 var rename          = require('gulp-rename');
-// const sass 			= require('gulp-sass')(require('sass'));
 var uglify          = require('gulp-uglify');
 
 
@@ -15,10 +12,11 @@ var localFolderJs       = localFolder + 'js/';
 gulp.task('js', function () {
 	return gulp.src([
 		localFolderJs + 'jquery-3.6.0.min.js',
+		localFolderJs + 'ant.js',
 		localFolderJs + '**/*.js'
 	])
 		.pipe(concat('all.js'))
-		.pipe(uglify())
+		// .pipe(uglify()) // TODO uncomment to minify js
 		.pipe(rename({
 			suffix: ".min"
 		}))
@@ -26,7 +24,7 @@ gulp.task('js', function () {
 });
 
 gulp.task('watch', function() {
-	gulp.watch(localFolderJs + '**/*.js',                       gulp.series('js'));
+	gulp.watch(localFolderJs + '**/*.js',   gulp.series('js'));
 });
 
 gulp.task('default', gulp.series(
