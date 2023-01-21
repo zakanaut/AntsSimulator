@@ -1,5 +1,3 @@
-
-
 function Ant(x, y, sizeAnts , canvas) {
     const obj = {};
     obj.x = x;
@@ -24,7 +22,7 @@ function Ant(x, y, sizeAnts , canvas) {
     obj.canvas1 = canvas;
     var ctx = obj.canvas.getContext("2d");
 
-    obj.path.addPoint( x, y, obj.canvas);
+    obj.path.addPoint( x, y, obj.canvas); // first path point before play()
 
     var ballRadius = sizeAnts;
     var time = 10;// how many iter'ations until it changes it's direction
@@ -51,7 +49,7 @@ function Ant(x, y, sizeAnts , canvas) {
         ctx.fill();
         ctx.closePath();
 
-        obj.path.play();
+        // obj.path.play(); // TODO - this line of code makes a mess, need to move path to main function
 
         // if it did sertain time of steps, there is a chance that it will change it's path
         if (iter === time) {

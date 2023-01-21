@@ -3,14 +3,14 @@ $(window).on('load', function () {
     var canvasH = canvas.height;
     var canvasW = canvas.width;
     var ctx = canvas.getContext("2d");
-    var sizeAnts = 1;
+    var sizeAnts = 5;
     var sizeHome = 30;
     var sizeFood = 8;
 
     var howManyFood = 100;
     var food = [];
 
-    var howManyAnts = 1;
+    var howManyAnts = 30;
     var ants = [];
 
     var pathsToHome = [];
@@ -27,6 +27,11 @@ $(window).on('load', function () {
     // create food
     for (k = 0; k < howManyFood; k++) {
         food[k] = Food( 100, 100, sizeFood, canvas );
+
+        // var rx = getRandomInt( 10 , canvasW  - 10 ); // random x
+        // var ry = getRandomInt( 10 , canvasH - 10 ); // random y
+
+        // food[k] = Food( rx, ry, sizeFood, canvas );
     }
 
 
