@@ -11,8 +11,6 @@ var localFolderJs       = localFolder + 'js/';
 
 gulp.task('js', function () {
 	return gulp.src([
-		localFolderJs + 'jquery-3.6.0.min.js',
-		localFolderJs + 'ant.js',
 		localFolderJs + '**/*.js'
 	])
 		.pipe(concat('all.js'))
