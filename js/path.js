@@ -17,7 +17,7 @@ function Path(color, canvas) {
     obj.play = function () {
         obj.points.forEach((point) => {
             ctx.beginPath();
-            ctx.arc(obj.x, obj.y, 1, 0, Math.PI * 2);
+            ctx.arc(point.x, point.y, 1, 0, Math.PI * 2);
             ctx.fillStyle = color;
             ctx.fill();
             ctx.closePath();

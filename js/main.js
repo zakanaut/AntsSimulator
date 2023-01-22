@@ -3,14 +3,14 @@ function Ants() {
     const canvasH = canvas.height;
     const canvasW = canvas.width;
     const ctx = canvas.getContext("2d");
-    const sizeAnts = 5;
+    const sizeAnts = 3;
     const sizeHome = 30;
     const sizeFood = 8;
 
     const howManyFood = 100;
     const food = [];
 
-    const howManyAnts = 30;
+    const howManyAnts = 200;
     const ants = [];
 
     const pathToHome = Path("#e12120", canvas);
@@ -74,6 +74,9 @@ function Ants() {
                 }
             })
         })
+
+        pathToFood.play();
+        pathToHome.play();
     },20);
 }
 
