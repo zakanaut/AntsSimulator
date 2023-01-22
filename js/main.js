@@ -1,31 +1,31 @@
 function Ants() {
-    var canvas = document.getElementById("myCanvas");
-    var canvasH = canvas.height;
-    var canvasW = canvas.width;
-    var ctx = canvas.getContext("2d");
-    var sizeAnts = 5;
-    var sizeHome = 30;
-    var sizeFood = 8;
+    const canvas = document.getElementById("myCanvas");
+    const canvasH = canvas.height;
+    const canvasW = canvas.width;
+    const ctx = canvas.getContext("2d");
+    const sizeAnts = 5;
+    const sizeHome = 30;
+    const sizeFood = 8;
 
-    var howManyFood = 100;
-    var food = [];
+    const howManyFood = 100;
+    const food = [];
 
-    var howManyAnts = 30;
-    var ants = [];
+    const howManyAnts = 30;
+    const ants = [];
 
-    var pathsToHome = [];
-    var pathsToFood = [];
+    const pathToHome = Path("#e12120", canvas);
+    const pathToFood = Path("#16b116", canvas);
 
     // create ants
-    for (i = 0; i < howManyAnts; i++) {
-        var rx = getRandomInt( 10 , canvasW  - 10 ); // random x
-        var ry = getRandomInt( 10 , canvasH - 10 ); // random y
+    for (let i = 0; i < howManyAnts; i++) {
+        const rx = getRandomInt( 10 , canvasW  - 10 ); // random x
+        const ry = getRandomInt( 10 , canvasH - 10 ); // random y
 
         ants[i] = Ant( rx, ry, sizeAnts, canvas );
     }
 
     // create food
-    for (k = 0; k < howManyFood; k++) {
+    for (let k = 0; k < howManyFood; k++) {
         food[k] = Food( 100, 100, sizeFood, canvas );
 
         // var rx = getRandomInt( 10 , canvasW  - 10 ); // random x
@@ -33,7 +33,6 @@ function Ants() {
 
         // food[k] = Food( rx, ry, sizeFood, canvas );
     }
-
 
     // make everything move
     setInterval(function () {
@@ -47,31 +46,34 @@ function Ants() {
         ctx.fill();
         ctx.closePath();
 
-        for (j = 0; j < food.length; j++ ) {
-            food[j].play();
-        }
+        food.forEach(foodItem => {
+            foodItem.play();
+        })
 
-        for (i = 0; i < ants.length; i++) {
-            ants[i].play();
+        ants.forEach((ant) => {
+            ant.play();
+
+            if (ant.leavePoint) {
+                ant.leavePoint = false;
+                if (ant.hasFood) {
+                    pathToFood.addPoint(ant.x, ant.y, ant.intensity);
+                } else {
+                    pathToHome.addPoint(ant.x, ant.y, ant.intensity);
+                }
+            }
 
             // home collision
-            if ( ants[i].checkColision( canvasW/2, canvasH/2, sizeHome ) ) {
-                ants[i].homePath = true;
-                ants[i].goToFood = true;
-                ants[i].goToHome = false;
-                ants[i].hasFood  = false;
+            if ( ant.checkCollision( canvasW/2, canvasH/2, sizeHome ) ) {
+                ant.collisionWithHome();
             }
 
             // food collision
-            for (j = 0; j < food.length; j++) {
-                if ( ants[i].checkColision( food[j].x, food[j].y, sizeFood ) ) {
-                    ants[i].homePath = false;
-                    ants[i].goToFood = false;
-                    ants[i].goToHome = true;
-                    ants[i].hasFood  = true;
+            food.forEach(foodItem => {
+                if ( ant.checkCollision( foodItem.x, foodItem.y, sizeFood ) ) {
+                    ant.collisionWithFood();
                 }
-            }
-        }
+            })
+        })
     },20);
 }
 

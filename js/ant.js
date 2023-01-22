@@ -5,32 +5,23 @@ function Ant(x, y, sizeAnts , canvas) {
     obj.dx = 0;
     obj.dy = 0;
 
+    obj.antSensitiveRadius = 30;
+
     // got a piece of food or not
     obj.hasFood  = false;
 
-    // is it detected home
-    obj.homePath = false;
+    // after home or food  is detected -> intensity is 1000
+    obj.intensity = 0;
 
-    // found Path to0095DD food
-    obj.goToFood = false;
+    // whether should an ant leave a point on the next step or not
+    obj.leavePoint = 0;
 
-    // when got a food go find home Path
-    obj.goToHome = false;
-
-    obj.path = Path();
-    obj.canvas = canvas;
-    obj.canvas1 = canvas;
-    var ctx = obj.canvas.getContext("2d");
-
-    obj.path.addPoint( x, y, obj.canvas); // first path point before play()
-
-    var ballRadius = sizeAnts;
-    var time = 10;// how many iter'ations until it changes it's direction
-    var iter = 0 ;// counter of iteration
-    var angle = getRandomInt( 0 , 360 );
-    var speed = 1.5;
-    var timePath = 100;
-    var iterPath = 0;
+    const ctx = canvas.getContext("2d");
+    const ballRadius = sizeAnts;
+    const time = 10;// how many iter'ations until it changes it's direction
+    let iter = 0 ;// counter of iterations
+    let angle = getRandomInt( 0 , 360 );
+    const speed = 1.5;
 
     obj.play = function () {
         //redraw
@@ -40,7 +31,7 @@ function Ant(x, y, sizeAnts , canvas) {
         if ( obj.hasFood ) {
             ctx.fillStyle = "#16b116";
         }
-        else if ( obj.homePath ) {
+        else if ( obj.homePathIntensity > 0 ) {
             ctx.fillStyle = "#e12120";
         }
         else {
@@ -49,15 +40,17 @@ function Ant(x, y, sizeAnts , canvas) {
         ctx.fill();
         ctx.closePath();
 
-        // obj.path.play(); // TODO - this line of code makes a mess, need to move path to main function
-
-        // if it did sertain time of steps, there is a chance that it will change it's path
+        // if it did certain time of steps:
         if (iter === time) {
-            leavePoint ( obj.x, obj.y, obj.canvas1);
-
             iter = 0;
 
-            var rand = Math.random();
+            // leave point
+            if (obj.homePathIntensity > 0 || obj.foodPathIntensity > 0) {
+                obj.leavePoint = true;
+            }
+
+            // there is a chance that it will change it's path
+            const rand = Math.random();
 
             if ( rand < 0.25 ) {
                 angle += 25;
@@ -66,6 +59,7 @@ function Ant(x, y, sizeAnts , canvas) {
                 angle -= 25;
             }
         }
+
 
         //detection if it goes beyond canvas border
         if(obj.x + obj.dx < ballRadius) {
@@ -83,29 +77,19 @@ function Ant(x, y, sizeAnts , canvas) {
         }
 
         // calculate next coordinates depending on direction angle
-        var radians = degrees_to_radians(angle);
+        const radians = degrees_to_radians(angle);
         obj.x = speed * Math.cos(radians) + obj.x;
         obj.y = speed * Math.sin(radians) + obj.y;
 
         iter += 1;
-        iterPath += 1;
-
-        if ( iterPath === timePath ) {
-            // leavePoint();
-            iterPath = 0;
-        }
     };
 
     function degrees_to_radians (degrees) {
         return degrees * ( Math.PI / 180 );
     }
 
-    function leavePoint ( x, y, canvas) {
-        obj.path.addPoint(x, y, canvas);
-    }
-
-    // checks if ant inside some area or collide with something
-    obj.checkColision = function ( x, y, radius) {
+    // checks if an ant inside some area or collide with something
+    obj.checkCollision = function ( x, y, radius) {
         if ( obj.x < x + radius) { // right
             if ( obj.x > x - radius) { // left
                 if ( obj.y < y + radius ) { // bottom
@@ -119,6 +103,18 @@ function Ant(x, y, sizeAnts , canvas) {
             return false;
         }
     };
+
+    obj.collisionWithHome = function () {
+        obj.homePathIntensity = 1000;
+        obj.foodPathIntensity = 0;
+        obj.hasFood = false;
+    }
+
+    obj.collisionWithFood = function () {
+        obj.homePathIntensity = 0;
+        obj.foodPathIntensity = 1000;
+        obj.hasFood = true;
+    }
 
     return obj;
 }

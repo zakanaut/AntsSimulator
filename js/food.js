@@ -6,7 +6,7 @@ function Food(x, y, sizeFood, canvas) {
     obj.x = x;
     obj.y = y;
 
-    var ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d");
 
     obj.play = function () {
         ctx.beginPath();
