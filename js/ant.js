@@ -29,13 +29,13 @@ function Ant(x, y, sizeAnts , canvas) {
         ctx.arc(obj.x, obj.y, ballRadius, 0, Math.PI*2);
         // paint the ant depending on it's status
         if ( obj.hasFood ) {
-            ctx.fillStyle = "#16b116";
+            ctx.fillStyle = foodColor;
         }
-        else if ( obj.homePathIntensity > 0 ) {
-            ctx.fillStyle = "#e12120";
+        else if ( obj.intensity > 0 ) {
+            ctx.fillStyle = homeColor;
         }
         else {
-            ctx.fillStyle = "#0095DD";
+            ctx.fillStyle = antColor;
         }
         ctx.fill();
         ctx.closePath();
@@ -44,9 +44,11 @@ function Ant(x, y, sizeAnts , canvas) {
         if (iter === time) {
             iter = 0;
 
+
             // leave point
-            if (obj.homePathIntensity > 0 || obj.foodPathIntensity > 0) {
+            if (obj.intensity > 0) {
                 obj.leavePoint = true;
+                obj.intensity -= 2;
             }
 
             // there is a chance that it will change it's path
@@ -105,14 +107,12 @@ function Ant(x, y, sizeAnts , canvas) {
     };
 
     obj.collisionWithHome = function () {
-        obj.homePathIntensity = 1000;
-        obj.foodPathIntensity = 0;
+        obj.intensity = 1000;
         obj.hasFood = false;
     }
 
     obj.collisionWithFood = function () {
-        obj.homePathIntensity = 0;
-        obj.foodPathIntensity = 1000;
+        obj.intensity = 1000;
         obj.hasFood = true;
     }
 

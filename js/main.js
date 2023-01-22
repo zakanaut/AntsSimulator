@@ -1,3 +1,8 @@
+const foodColor = '#16b116';
+const homeColor = '#e12120';
+const antColor = '#0095DD';
+
+
 function Ants() {
     const canvas = document.getElementById("myCanvas");
     const canvasH = canvas.height;
@@ -13,8 +18,8 @@ function Ants() {
     const howManyAnts = 200;
     const ants = [];
 
-    const pathToHome = Path("#e12120", canvas);
-    const pathToFood = Path("#16b116", canvas);
+    const pathToHome = Path(homeColor, canvas);
+    const pathToFood = Path(foodColor, canvas);
 
     // create ants
     for (let i = 0; i < howManyAnts; i++) {
