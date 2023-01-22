@@ -21,6 +21,8 @@ function Ants() {
     const pathToHome = Path(homeColor, canvas);
     const pathToFood = Path(foodColor, canvas);
 
+    const field = Field(canvasW, canvasH);
+
     // create ants
     for (let i = 0; i < howManyAnts; i++) {
         const rx = getRandomInt( 10 , canvasW  - 10 ); // random x
