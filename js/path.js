@@ -46,8 +46,8 @@ function Path(color, canvas) {
 
     obj.addPoint = function (x, y, intensity) {
         obj.points.push({
-            x,
-            y,
+            x: parseInt(x),
+            y: parseInt(y),
             intensity
         });
     }
