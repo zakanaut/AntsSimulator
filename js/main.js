@@ -21,8 +21,6 @@ function Ants() {
     const pathToHome = Path(homeColor, canvas);
     const pathToFood = Path(foodColor, canvas);
 
-    const field = Field(canvasW, canvasH);
-
     // create ants
     for (let i = 0; i < howManyAnts; i++) {
         const rx = getRandomInt( 10 , canvasW  - 10 ); // random x
@@ -43,9 +41,7 @@ function Ants() {
 
     // make everything move
     setInterval(function () {
-        field.clear();
-
-        // first we clear field
+        // first we clear canvas
         ctx.clearRect(0, 0, canvasW, canvasH);
 
         //then we draw everything again
@@ -57,15 +53,6 @@ function Ants() {
 
         food.forEach(foodItem => {
             foodItem.play();
-            // field.add(foodItem.x, foodItem.y, foodItem);
-        })
-
-        pathToHome.points.forEach(point => {
-            field.add(point.x, point.y, {...point, type: 'pointToHome'});
-        })
-
-        pathToFood.points.forEach(point => {
-            field.add(point.x, point.y, {...point, type: 'pointToFood'});
         })
 
         ants.forEach((ant) => {
