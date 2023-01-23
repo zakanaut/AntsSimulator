@@ -44,7 +44,6 @@ function Ant(x, y, sizeAnts , canvas) {
         if (iter === time) {
             iter = 0;
 
-
             // leave point
             if (obj.intensity > 0) {
                 obj.leavePoint = true;

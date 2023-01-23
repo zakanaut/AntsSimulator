@@ -43,6 +43,8 @@ function Ants() {
 
     // make everything move
     setInterval(function () {
+        field.clear();
+
         // first we clear field
         ctx.clearRect(0, 0, canvasW, canvasH);
 
@@ -55,6 +57,15 @@ function Ants() {
 
         food.forEach(foodItem => {
             foodItem.play();
+            // field.add(foodItem.x, foodItem.y, foodItem);
+        })
+
+        pathToHome.points.forEach(point => {
+            field.add(point.x, point.y, {...point, type: 'pointToHome'});
+        })
+
+        pathToFood.points.forEach(point => {
+            field.add(point.x, point.y, {...point, type: 'pointToFood'});
         })
 
         ants.forEach((ant) => {

@@ -21,7 +21,7 @@ function Field(width, height) {
     console.log(obj.grid);
 
     obj.add = function (x, y, val) {
-        grid[x][y].push(val);
+        obj.grid[parseInt(x)][parseInt(y)].push(val);
     }
 
     return obj;
