@@ -23,7 +23,7 @@ function Ants() {
 
     // create ants
     for (let i = 0; i < howManyAnts; i++) {
-        const rx = getRandomInt( 10 , canvasW  - 10 ); // random x
+        const rx = getRandomInt( 10 , canvasW - 10 ); // random x
         const ry = getRandomInt( 10 , canvasH - 10 ); // random y
 
         ants[i] = Ant( rx, ry, sizeAnts, canvas );
@@ -64,6 +64,24 @@ function Ants() {
                     pathToFood.addPoint(ant.x, ant.y, ant.intensity);
                 } else {
                     pathToHome.addPoint(ant.x, ant.y, ant.intensity);
+                }
+            }
+
+            // find Food
+            // find Home with food
+            if (ant.hasFood) {
+                const point = pathToHome.findBestPointInRadius(ant.x, ant.y);
+                if (point !== undefined) {
+                    // console.log('pathToHome');
+                    // console.log(point);
+                    // console.log(ant);
+                }
+            } else {
+                const point = pathToFood.findBestPointInRadius(ant.x, ant.y);
+                if (point !== undefined) {
+                    // console.log('pathToFood');
+                    // console.log(point);
+                    // console.log(ant);
                 }
             }
 

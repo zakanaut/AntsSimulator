@@ -52,22 +52,37 @@ function Path(color, canvas) {
         });
     }
 
-    // obj.findBestPointInCircle = function (antX, antY) {
-    //     const bestPoint;
-    //     const r = 40;
-    //
-    //     if (ptInCircle()) {
-    //
-    //     }
-    // }
-    //
-    // function ptInCircle(pt, center, r) {
-    //
-    //     const lhs = Math.pow(center[0] - pt[0], 2) + Math.pow(center[1] - pt[1], 2);
-    //     const rhs = Math.pow(r, 2);
-    //
-    //     return lhs < rhs ? -1 : (lhs === rhs ? 0 : 1);
-    // }
+    obj.findBestPointInRadius = function (antX, antY) {
+        let bestPoint;
+        const r = 30;
+
+        obj.points.forEach(point => {
+            if (distance(point.x, point.y, antX, antY) <= 30) {
+                console.log('in');
+                // if bestPoint exists
+                // if no it's the bestPoint
+                // console.log('inside');
+                // console.log(point);
+                // console.log(antX, antY);
+                // if (bestPoint?.intensity) {
+                //     if (bestPoint.intensity < point.intensity) {
+                //         bestPoint = point;
+                //     }
+                //     // console.log('opop');
+                // } else {
+                //     // console.log('point');
+                //     // console.log(point);
+                //     bestPoint = point;
+                // }
+            }
+        })
+
+        return bestPoint;
+    }
+
+    function distance (x1, y1, x2, y2) {
+        return Math.hypot(x2 - x1, y2 - y1);
+    }
 
     return obj;
 }
