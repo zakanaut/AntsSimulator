@@ -23,18 +23,16 @@ function Ant(x, y, sizeAnts , canvas) {
     let angle = getRandomInt( 0 , 360 );
     const speed = 1.5;
 
-    obj.play = function () {
+    obj.play = function (nextPoint) {
         //redraw
         ctx.beginPath();
         ctx.arc(obj.x, obj.y, ballRadius, 0, Math.PI*2);
         // paint the ant depending on it's status
         if ( obj.hasFood ) {
             ctx.fillStyle = foodColor;
-        }
-        else if ( obj.intensity > 0 ) {
+        } else if ( obj.intensity > 0 ) {
             ctx.fillStyle = homeColor;
-        }
-        else {
+        } else {
             ctx.fillStyle = antColor;
         }
         ctx.fill();
@@ -53,14 +51,12 @@ function Ant(x, y, sizeAnts , canvas) {
             // there is a chance that it will change it's path
             const rand = Math.random();
 
-            if ( rand < 0.25 ) {
+            if ( rand < 0.25 && nextPoint === undefined ) {
                 angle += 25;
-            }
-            else if ( rand > 0.75 ) {
+            } else if ( rand > 0.75 && nextPoint === undefined ) {
                 angle -= 25;
             }
         }
-
 
         //detection if it goes beyond canvas border
         if(obj.x + obj.dx < ballRadius) {
@@ -77,15 +73,24 @@ function Ant(x, y, sizeAnts , canvas) {
             obj.y = canvas.height-ballRadius;
         }
 
+        let radians;
         // calculate next coordinates depending on direction angle
-        const radians = degrees_to_radians(angle);
+        if (nextPoint !== undefined) {
+            radians = calcAngleDegrees(nextPoint.x, nextPoint.y);
+        } else {
+            radians = degreesToRadians(angle);
+        }
         obj.x = speed * Math.cos(radians) + obj.x;
         obj.y = speed * Math.sin(radians) + obj.y;
 
         iter += 1;
     };
 
-    function degrees_to_radians (degrees) {
+    function calcAngleDegrees(nextX, nextY) {
+        return Math.atan2( nextY - obj.y, nextX - obj.x);
+    }
+
+    function degreesToRadians (degrees) {
         return degrees * ( Math.PI / 180 );
     }
 

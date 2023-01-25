@@ -56,8 +56,6 @@ function Ants() {
         })
 
         ants.forEach((ant) => {
-            ant.play();
-
             if (ant.leavePoint) {
                 ant.leavePoint = false;
                 if (ant.hasFood) {
@@ -67,23 +65,17 @@ function Ants() {
                 }
             }
 
+            let nextPoint;
+
             // find Food
             // find Home with food
             if (ant.hasFood) {
-                const point = pathToHome.findBestPointInRadius(ant.x, ant.y);
-                if (point !== undefined) {
-                    // console.log('pathToHome');
-                    // console.log(point);
-                    // console.log(ant);
-                }
+                nextPoint = pathToHome.findBestPointInRadius(ant.x, ant.y);
             } else {
-                const point = pathToFood.findBestPointInRadius(ant.x, ant.y);
-                if (point !== undefined) {
-                    // console.log('pathToFood');
-                    // console.log(point);
-                    // console.log(ant);
-                }
+                nextPoint = pathToFood.findBestPointInRadius(ant.x, ant.y);
             }
+
+            ant.play(nextPoint);
 
             // home collision
             if ( ant.checkCollision( canvasW/2, canvasH/2, sizeHome ) ) {

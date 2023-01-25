@@ -58,22 +58,11 @@ function Path(color, canvas) {
 
         obj.points.forEach(point => {
             if (distance(point.x, point.y, antX, antY) <= 30) {
-                console.log('in');
                 // if bestPoint exists
                 // if no it's the bestPoint
-                // console.log('inside');
-                // console.log(point);
-                // console.log(antX, antY);
-                // if (bestPoint?.intensity) {
-                //     if (bestPoint.intensity < point.intensity) {
-                //         bestPoint = point;
-                //     }
-                //     // console.log('opop');
-                // } else {
-                //     // console.log('point');
-                //     // console.log(point);
-                //     bestPoint = point;
-                // }
+                if (bestPoint === undefined || bestPoint?.intensity < point.intensity) {
+                    bestPoint = point;
+                }
             }
         })
 
