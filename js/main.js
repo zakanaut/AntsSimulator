@@ -21,10 +21,13 @@ function Ants() {
     const pathToHome = Path(homeColor, canvas);
     const pathToFood = Path(foodColor, canvas);
 
+    // create home
+    const home = Home(canvasW/2, canvasH/2, sizeHome, canvas );
+
     // create ants
     for (let i = 0; i < howManyAnts; i++) {
-        const rx = getRandomInt( 10 , canvasW - 10 ); // random x
-        const ry = getRandomInt( 10 , canvasH - 10 ); // random y
+        const rx = canvasW/2;
+        const ry = canvasH/2;
 
         ants[i] = Ant( rx, ry, sizeAnts, canvas );
     }
@@ -45,11 +48,7 @@ function Ants() {
         ctx.clearRect(0, 0, canvasW, canvasH);
 
         //then we draw everything again
-        ctx.beginPath();
-        ctx.arc( canvasW/2 , canvasH/2 , sizeHome, 0, Math.PI*2);
-        ctx.fillStyle = "#801716";
-        ctx.fill();
-        ctx.closePath();
+        home.play()
 
         food.forEach(foodItem => {
             foodItem.play();
@@ -70,15 +69,15 @@ function Ants() {
             // find Food
             // find Home with food
             if (ant.hasFood) {
-                nextPoint = pathToHome.findBestPointInRadius(ant.x, ant.y);
+                nextPoint = pathToHome.findBestPointInRadius(ant.x, ant.y, [], home);
             } else {
-                nextPoint = pathToFood.findBestPointInRadius(ant.x, ant.y);
+                nextPoint = pathToFood.findBestPointInRadius(ant.x, ant.y, food);
             }
 
             ant.play(nextPoint);
 
             // home collision
-            if ( ant.checkCollision( canvasW/2, canvasH/2, sizeHome ) ) {
+            if ( ant.checkCollision( home.x, home.y, sizeHome ) ) {
                 ant.collisionWithHome();
             }
 
@@ -92,7 +91,7 @@ function Ants() {
 
         pathToFood.play();
         pathToHome.play();
-    },20);
+    },40);
 }
 
 function getRandomInt(min, max) {

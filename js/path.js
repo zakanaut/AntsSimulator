@@ -5,7 +5,7 @@ function Path(color, canvas) {
 
     const ctx = canvas.getContext("2d");
 
-    obj.intensityFall = -1.5;
+    obj.intensityFall = -1;
 
     obj.points = [];
     // point = {
@@ -52,15 +52,32 @@ function Path(color, canvas) {
         });
     }
 
-    obj.findBestPointInRadius = function (antX, antY) {
+    obj.findBestPointInRadius = function (antX, antY, priorityPoints = [], home ) {
         let bestPoint;
-        const r = 30;
+        const r = 80;
+
+        if (home !== undefined) {
+            // distance to home = distance to home center - home radius
+            const distanceToHome = distance(home.x, home.y, antX, antY) - home?.radius
+            if (distanceToHome <= r) {
+                return {...home, intensity: 1100};
+            }
+        } else if (priorityPoints.length) {
+            bestPoint = priorityPoints.find(point => {
+                return distance(point.x, point.y, antX, antY) <= r
+            })
+
+            if (bestPoint !== undefined) {
+                bestPoint.intensity = 1100;
+                return bestPoint;
+            }
+        }
 
         obj.points.forEach(point => {
-            if (distance(point.x, point.y, antX, antY) <= 30) {
+            if (distance(point.x, point.y, antX, antY) <= r) {
                 // if bestPoint exists
                 // if no it's the bestPoint
-                if (bestPoint === undefined || bestPoint?.intensity < point.intensity) {
+                if (bestPoint === undefined || bestPoint?.intensity > point.intensity) {
                     bestPoint = point;
                 }
             }

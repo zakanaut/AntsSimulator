@@ -16,12 +16,15 @@ function Ant(x, y, sizeAnts , canvas) {
     // whether should an ant leave a point on the next step or not
     obj.leavePoint = 0;
 
+
     const ctx = canvas.getContext("2d");
     const ballRadius = sizeAnts;
     const time = 10;// how many iter'ations until it changes it's direction
     let iter = 0 ;// counter of iterations
     let angle = getRandomInt( 0 , 360 );
     const speed = 1.5;
+    let lastNextPoint;
+    let skipNextPoint = false;
 
     obj.play = function (nextPoint) {
         //redraw
@@ -43,18 +46,23 @@ function Ant(x, y, sizeAnts , canvas) {
             iter = 0;
 
             // leave point
-            if (obj.intensity > 0) {
+            if ( obj.intensity > 0 ) {
                 obj.leavePoint = true;
-                obj.intensity -= 2;
+                obj.intensity -= 0.5;
             }
+
+            skipNextPoint =
+                lastNextPoint?.intensity < nextPoint?.intensity;
 
             // there is a chance that it will change it's path
             const rand = Math.random();
 
-            if ( rand < 0.25 && nextPoint === undefined ) {
-                angle += 25;
-            } else if ( rand > 0.75 && nextPoint === undefined ) {
-                angle -= 25;
+            if (nextPoint === undefined || skipNextPoint) {
+                if ( rand < 0.25 ) {
+                    angle += 25;
+                } else if ( rand > 0.75 ) {
+                    angle -= 25;
+                }
             }
         }
 
@@ -75,7 +83,7 @@ function Ant(x, y, sizeAnts , canvas) {
 
         let radians;
         // calculate next coordinates depending on direction angle
-        if (nextPoint !== undefined) {
+        if (nextPoint !== undefined && !skipNextPoint) {
             radians = calcAngleDegrees(nextPoint.x, nextPoint.y);
         } else {
             radians = degreesToRadians(angle);
@@ -84,6 +92,7 @@ function Ant(x, y, sizeAnts , canvas) {
         obj.y = speed * Math.sin(radians) + obj.y;
 
         iter += 1;
+        skipNextPoint = false;
     };
 
     function calcAngleDegrees(nextX, nextY) {
