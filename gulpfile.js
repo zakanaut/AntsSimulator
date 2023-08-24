@@ -1,13 +1,13 @@
 'use strict';
 
-var concat          = require('gulp-concat');
-var gulp            = require('gulp');
-var rename          = require('gulp-rename');
-var uglify          = require('gulp-uglify');
+var concat = require('gulp-concat');
+var gulp= require('gulp');
+var rename= require('gulp-rename');
+var uglify= require('gulp-uglify');
 
 
-var localFolder         = './';
-var localFolderJs       = localFolder + 'js/';
+var localFolder = './';
+var localFolderJs = localFolder + 'js/';
 
 gulp.task('js', function () {
 	return gulp.src([
