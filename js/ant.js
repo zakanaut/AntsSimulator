@@ -13,9 +13,6 @@ function Ant(x, y, sizeAnts , canvas) {
     // after home or food  is detected -> intensity is 1000
     obj.intensity = 0;
 
-    // whether should an ant leave a point on the next step or not
-    obj.leavePoint = 0;
-
 
     const ctx = canvas.getContext("2d");
     const ballRadius = sizeAnts;
@@ -45,14 +42,12 @@ function Ant(x, y, sizeAnts , canvas) {
         if (iter === time) {
             iter = 0;
 
-            // leave point
             if ( obj.intensity > 0 ) {
                 obj.leavePoint = true;
-                obj.intensity -= 0.5;
+                obj.intensity -= 1;
             }
 
-            skipNextPoint =
-                lastNextPoint?.intensity < nextPoint?.intensity;
+            skipNextPoint = lastNextPoint?.intensity < nextPoint?.intensity;
 
             // there is a chance that it will change it's path
             const rand = Math.random();

@@ -18,8 +18,7 @@ function Ants() {
     const howManyAnts = 200;
     const ants = [];
 
-    const pathToHome = Path(homeColor, canvas);
-    const pathToFood = Path(foodColor, canvas);
+    const grid = Grid(canvasW, canvasH, 5, canvas);
 
     // create home
     const home = Home(canvasW/2, canvasH/2, sizeHome, canvas );
@@ -34,12 +33,11 @@ function Ants() {
 
     // create food
     for (let k = 0; k < howManyFood; k++) {
-        food[k] = Food( 100, 100, sizeFood, canvas );
+        // food[k] = Food( 100, 100, sizeFood, canvas );
 
-        // var rx = getRandomInt( 10 , canvasW  - 10 ); // random x
-        // var ry = getRandomInt( 10 , canvasH - 10 ); // random y
-
-        // food[k] = Food( rx, ry, sizeFood, canvas );
+        var rx = getRandomInt( 10 , canvasW  - 10 ); // random x
+        var ry = getRandomInt( 10 , canvasH - 10 ); // random y
+        food[k] = Food( rx, ry, sizeFood, canvas );
     }
 
     // make everything move
@@ -48,19 +46,21 @@ function Ants() {
         ctx.clearRect(0, 0, canvasW, canvasH);
 
         //then we draw everything again
-        home.play()
+        grid.play();
+        home.play();
 
         food.forEach(foodItem => {
             foodItem.play();
         })
 
         ants.forEach((ant) => {
+            // todo replace with a clock
             if (ant.leavePoint) {
                 ant.leavePoint = false;
                 if (ant.hasFood) {
-                    pathToFood.addPoint(ant.x, ant.y, ant.intensity);
+                    grid.addPoint(ant.x, ant.y, true, ant.intensity);
                 } else {
-                    pathToHome.addPoint(ant.x, ant.y, ant.intensity);
+                    grid.addPoint(ant.x, ant.y, false, ant.intensity);
                 }
             }
 
@@ -68,13 +68,13 @@ function Ants() {
 
             // find Food
             // find Home with food
-            if (ant.hasFood) {
-                nextPoint = pathToHome.findBestPointInRadius(ant.x, ant.y, [], home);
-            } else {
-                nextPoint = pathToFood.findBestPointInRadius(ant.x, ant.y, food);
-            }
+            // if (ant.hasFood) {
+            //     nextPoint = pathToHome.findBestPointInRadius(ant.x, ant.y, [], home);
+            // } else {
+            //     nextPoint = pathToFood.findBestPointInRadius(ant.x, ant.y, food);
+            // }
 
-            ant.play(nextPoint);
+            ant.play();
 
             // home collision
             if ( ant.checkCollision( home.x, home.y, sizeHome ) ) {
@@ -88,9 +88,6 @@ function Ants() {
                 }
             })
         })
-
-        pathToFood.play();
-        pathToHome.play();
     },40);
 }
 
