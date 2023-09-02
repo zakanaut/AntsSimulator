@@ -20,11 +20,14 @@ function Grid(canvasW, canvasH, size, canvas) {
 
     const ctx = canvas.getContext("2d");
 
+    // play is basically draw
     obj.play = function () {
         obj.matrix.forEach((column, columnIndex) => {
             column.forEach((row, rowIndex) => {
-                if (obj.matrix[columnIndex][rowIndex].isHomePoint > 0) {
+                if (obj.matrix[columnIndex][rowIndex].isHomePoint) {
                     drawCell(columnIndex, rowIndex, '#e12120');
+                } else if (obj.matrix[columnIndex][rowIndex].isFoodPoint) {
+                    drawCell(columnIndex, rowIndex, `#16b116`);
                 } else if (obj.matrix[columnIndex][rowIndex].homeIntensity > 0) {
                     row.homeIntensity += obj.intensityFall;
                     drawCell(columnIndex, rowIndex, `rgba(250, 250, 250)`); // ${row.homeIntensity}
@@ -47,6 +50,12 @@ function Grid(canvasW, canvasH, size, canvas) {
     obj.addHome = function (column, row, homeRadius) {
         getPointsInRadius(column, row, homeRadius).forEach(point => {
             obj.matrix[point.column][point.row].isHomePoint = true;
+        })
+    }
+
+    obj.addFood = function (column, row, homeRadius) {
+        getPointsInRadius(column, row, homeRadius).forEach(point => {
+            obj.matrix[point.column][point.row].isFoodPoint = true;
         })
     }
 
@@ -141,6 +150,7 @@ function Grid(canvasW, canvasH, size, canvas) {
         return arr;
     }
 
+    // Function to get all the points in a gird circle.
     function getPointsInRadius(centerX, centerY, radius) {
         const points = [];
 

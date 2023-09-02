@@ -14,7 +14,6 @@ function Ants() {
     const sizeGrid = 2;
 
     const howManyFood = 100;
-    const food = [];
 
     const howManyAnts = 200;
     const ants = [];
@@ -34,11 +33,11 @@ function Ants() {
 
     // create food
     for (let k = 0; k < howManyFood; k++) {
-        // food[k] = Food( 100, 100, sizeFood, canvas );
+        grid.addFood( 100/sizeGrid, 100/sizeGrid, sizeFood );
 
-        var rx = getRandomInt( 10 , canvasW  - 10 ); // random x
-        var ry = getRandomInt( 10 , canvasH - 10 ); // random y
-        food[k] = Food( rx, ry, sizeFood, canvas );
+        // var rx = getRandomInt( 10 , canvasW  - 10 ); // random x
+        // var ry = getRandomInt( 10 , canvasH - 10 ); // random y
+        // food[k] = Food( rx, ry, sizeFood, canvas );
     }
 
     // make everything move
@@ -48,10 +47,6 @@ function Ants() {
 
         //then we draw everything again
         grid.play();
-
-        food.forEach(foodItem => {
-            foodItem.play();
-        })
 
         ants.forEach((ant) => {
             // todo replace with a clock
@@ -82,11 +77,11 @@ function Ants() {
             // }
 
             // food collision
-            food.forEach(foodItem => {
-                if ( ant.checkCollision( foodItem.x, foodItem.y, sizeFood ) ) {
-                    ant.collisionWithFood();
-                }
-            })
+            // food.forEach(foodItem => {
+            //     if ( ant.checkCollision( foodItem.x, foodItem.y, sizeFood ) ) {
+            //         ant.collisionWithFood();
+            //     }
+            // })
         })
     },40);
 }
