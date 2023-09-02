@@ -59,17 +59,11 @@ function Ants() {
                 }
             }
 
-            let nextPoint;
-
-            // if has food -> find home
+            // if ant has food -> find home
             // else find food
-            // if (ant.hasFood) {
-            //     nextPoint = pathToHome.findBestPointInRadius(ant.x, ant.y, [], home);
-            // } else {
-            //     nextPoint = pathToFood.findBestPointInRadius(ant.x, ant.y, food);
-            // }
+            const nextPoint = grid.findBestPointInRadius(ant.x, ant.y, ant.hasFood);
 
-            ant.play();
+            ant.play(nextPoint);
 
             // // home collision
             // if ( ant.checkCollision( home.x, home.y, sizeHome ) ) {
