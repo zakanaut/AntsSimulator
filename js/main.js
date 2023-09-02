@@ -11,6 +11,7 @@ function Ants() {
     const sizeAnts = 3;
     const sizeHome = 30;
     const sizeFood = 8;
+    const sizeGrid = 2;
 
     const howManyFood = 100;
     const food = [];
@@ -18,7 +19,7 @@ function Ants() {
     const howManyAnts = 200;
     const ants = [];
 
-    const grid = Grid(canvasW, canvasH, 5, canvas);
+    const grid = Grid(canvasW, canvasH, sizeGrid, canvas);
 
     // create home
     const home = Home(canvasW/2, canvasH/2, sizeHome, canvas );
