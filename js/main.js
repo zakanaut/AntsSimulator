@@ -22,7 +22,7 @@ function Ants() {
     const grid = Grid(canvasW, canvasH, sizeGrid, canvas);
 
     // create home
-    const home = Home(canvasW/2, canvasH/2, sizeHome, canvas );
+    grid.addHome( canvasW/2/sizeGrid, canvasH/2/sizeGrid, sizeHome );
 
     // create ants
     for (let i = 0; i < howManyAnts; i++) {
@@ -48,7 +48,6 @@ function Ants() {
 
         //then we draw everything again
         grid.play();
-        home.play();
 
         food.forEach(foodItem => {
             foodItem.play();
@@ -67,8 +66,8 @@ function Ants() {
 
             let nextPoint;
 
-            // find Food
-            // find Home with food
+            // if has food -> find home
+            // else find food
             // if (ant.hasFood) {
             //     nextPoint = pathToHome.findBestPointInRadius(ant.x, ant.y, [], home);
             // } else {
@@ -77,10 +76,10 @@ function Ants() {
 
             ant.play();
 
-            // home collision
-            if ( ant.checkCollision( home.x, home.y, sizeHome ) ) {
-                ant.collisionWithHome();
-            }
+            // // home collision
+            // if ( ant.checkCollision( home.x, home.y, sizeHome ) ) {
+            //     ant.collisionWithHome();
+            // }
 
             // food collision
             food.forEach(foodItem => {
