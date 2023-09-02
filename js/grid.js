@@ -97,6 +97,27 @@ function Grid(canvasW, canvasH, size, canvas) {
         return undefined;
     }
 
+    obj.checkCollision = function (x, y, type) {
+        const position = findPosition(x, y);
+
+        // Check if obj.matrix[position.column] exists and is an array
+        if (
+            obj.matrix[position.column] &&
+            Array.isArray(obj.matrix[position.column])
+        ) {
+            // Check if obj.matrix[position.column][position.row] exists
+            const cell = obj.matrix[position.column][position.row];
+
+            // Check if cell has a 'type' property
+            if (cell && typeof cell === 'object' && type in cell) {
+                return cell[type] ?? false;
+            }
+        }
+
+        // If any check fails, return false or handle the error appropriately
+        return false;
+    }
+
     // Find the center of a cell, use it as coordinates of next point for an ant.
     function findCoordsOfPixelsCenter(x, y) {
         const distanceToCenter = parseInt(size / 2);

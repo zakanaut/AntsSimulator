@@ -33,7 +33,7 @@ function Ants() {
 
     // create food
     for (let k = 0; k < howManyFood; k++) {
-        grid.addFood( 100/sizeGrid, 100/sizeGrid, sizeFood );
+        grid.addFood( 400/sizeGrid, 300/sizeGrid, sizeFood );
 
         // var rx = getRandomInt( 10 , canvasW  - 10 ); // random x
         // var ry = getRandomInt( 10 , canvasH - 10 ); // random y
@@ -65,17 +65,14 @@ function Ants() {
 
             ant.play(nextPoint);
 
-            // // home collision
-            // if ( ant.checkCollision( home.x, home.y, sizeHome ) ) {
-            //     ant.collisionWithHome();
-            // }
+            // home collision
+            if ( grid.checkCollision( ant.x, ant.y, 'isHomePoint' ) ) {
+                ant.collisionWithHome();
+            }
 
-            // food collision
-            // food.forEach(foodItem => {
-            //     if ( ant.checkCollision( foodItem.x, foodItem.y, sizeFood ) ) {
-            //         ant.collisionWithFood();
-            //     }
-            // })
+            if ( grid.checkCollision( ant.x, ant.y, 'isFoodPoint' ) ) {
+                ant.collisionWithFood();
+            }
         })
     },40);
 }
