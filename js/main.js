@@ -8,6 +8,7 @@ function Ants() {
     const canvasH = canvas.height;
     const canvasW = canvas.width;
     const ctx = canvas.getContext("2d");
+
     const sizeAnts = 3;
     const sizeHome = 30;
     const sizeFood = 8;
@@ -33,13 +34,13 @@ function Ants() {
     }
 
     // create food
-    for (let k = 0; k < howManyFood; k++) {
-        grid.addFood( 400/sizeGrid, 300/sizeGrid, sizeFood );
-
-        // var rx = getRandomInt( 10 , canvasW  - 10 ); // random x
-        // var ry = getRandomInt( 10 , canvasH - 10 ); // random y
-        // food[k] = Food( rx, ry, sizeFood, canvas );
-    }
+    // for (let k = 0; k < howManyFood; k++) {
+        grid.addFood( 650/sizeGrid, 380/sizeGrid, sizeFood );
+    //
+    //     // var rx = getRandomInt( 10 , canvasW  - 10 ); // random x
+    //     // var ry = getRandomInt( 10 , canvasH - 10 ); // random y
+    //     // food[k] = Food( rx, ry, sizeFood, canvas );
+    // }
 
     // make everything move
     setInterval(function () {
@@ -64,6 +65,7 @@ function Ants() {
             // else find food
             const nextPoint = grid.findBestPointInRadius(ant.x, ant.y, antSensitiveRadius, ant.hasFood);
 
+            // next point can be undefined, then ant will just move randomly
             ant.play(nextPoint);
 
             // home collision

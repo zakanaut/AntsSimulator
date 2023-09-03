@@ -70,14 +70,16 @@ function Grid(canvasW, canvasH, size, canvas) {
 
         // then find food or home
         if (hasFood) {
-            for (const point in points) {
-                if (point?.isHomePoint) {
+            for (let i = 0; i < points.length; i++) {
+                const point = points[i];
+                if (obj.matrix[point.column][point.row]?.isHomePoint) {
                     return findCoordsOfPixelsCenter(point.column, point.row)
                 }
             }
         } else if (!hasFood) {
-            for (const point in points) {
-                if (point?.isFoodPoint) {
+            for (let i = 0; i < points.length; i++) {
+                const point = points[i];
+                if (obj.matrix[point.column][point.row]?.isFoodPoint) {
                     return findCoordsOfPixelsCenter(point.column, point.row)
                 }
             }
@@ -100,28 +102,26 @@ function Grid(canvasW, canvasH, size, canvas) {
     obj.checkCollision = function (x, y, type) {
         const position = findPosition(x, y);
 
-        // Check if obj.matrix[position.column] exists and is an array
-        if (
-            obj.matrix[position.column] &&
-            Array.isArray(obj.matrix[position.column])
-        ) {
-            // Check if obj.matrix[position.column][position.row] exists
-            const cell = obj.matrix[position.column][position.row];
-
-            // Check if cell has a 'type' property
-            if (cell && typeof cell === 'object' && type in cell) {
-                return cell[type] ?? false;
-            }
+        if (isValidColumnAndRow(position.column, position.row)) {
+            return obj.matrix[position.column][position.row][type] ?? false;
         }
-
-        // If any check fails, return false or handle the error appropriately
-        return false;
     }
 
     // Find the center of a cell, use it as coordinates of next point for an ant.
     function findCoordsOfPixelsCenter(x, y) {
         const distanceToCenter = parseInt(size / 2);
-        return {x: x + distanceToCenter, y: y + distanceToCenter};
+        return {x: x * size + distanceToCenter, y: y * size + distanceToCenter};
+    }
+
+    // check if valid column and row
+    function isValidColumnAndRow(column, row) {
+        if (Number.isInteger(column) && Number.isInteger(row)) {
+            if (column >= 0 && row >= 0 && column < obj.columns && row < obj.rows) {
+                return true
+            }
+        }
+
+        return false;
     }
 
     // Draw a cell on canvas.
@@ -137,25 +137,25 @@ function Grid(canvasW, canvasH, size, canvas) {
     function findBestPoints(points, hasFood = false) {
         let arr = [];
 
-        for (const point in points) {
+        points.forEach(point => {
             const { column, row } = point
             // for home points
-            if (hasFood && point.homeIntensity >= 1) {
+            if (hasFood && obj.matrix[column][row].homeIntensity >= 1) {
                 arr.push({
                     column,
                     row,
-                    intensity: point.homeIntensity
+                    intensity: obj.matrix[column][row].homeIntensity
                 });
             }
             // for food points
-            else if (!hasFood && point.foodIntensity >= 1) {
+            else if (!hasFood && obj.matrix[column][row].foodIntensity >= 1) {
                 arr.push({
                     column,
                     row,
-                    intensity: point.homeIntensity
+                    intensity: obj.matrix[column][row].foodIntensity
                 });
             }
-        }
+        })
 
         return arr;
     }
@@ -164,13 +164,16 @@ function Grid(canvasW, canvasH, size, canvas) {
     function getPointsInRadius(centerX, centerY, radius) {
         const points = [];
 
+        // TODO check points out of bounds
         for (let x = centerX - radius; x <= centerX + radius; x++) {
             for (let y = centerY - radius; y <= centerY + radius; y++) {
-                // Calculate the distance from the center to the current point (x, y)
-                const distance = Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
+                if (isValidColumnAndRow(x, y)) {
+                    // Calculate the distance from the center to the current point (x, y)
+                    const distance = Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
 
-                if (distance <= radius) {
-                    points.push({ column: x, row: y });
+                    if (distance <= radius) {
+                        points.push({ column: x, row: y });
+                    }
                 }
             }
         }
