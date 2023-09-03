@@ -5,8 +5,6 @@ function Ant(x, y, sizeAnts , canvas) {
     obj.dx = 0;
     obj.dy = 0;
 
-    obj.antSensitiveRadius = 30;
-
     // got a piece of food or not
     obj.hasFood  = false;
 
@@ -16,7 +14,7 @@ function Ant(x, y, sizeAnts , canvas) {
 
     const ctx = canvas.getContext("2d");
     const ballRadius = sizeAnts;
-    const time = 10;// how many iter'ations until it changes it's direction
+    const time = 10;// how many iter'ations until it changes its direction
     let iter = 0 ;// counter of iterations
     let angle = getRandomInt( 0 , 360 );
     const speed = 1.5;
@@ -97,22 +95,6 @@ function Ant(x, y, sizeAnts , canvas) {
     function degreesToRadians (degrees) {
         return degrees * ( Math.PI / 180 );
     }
-
-    // checks if an ant inside some area or collide with something
-    obj.checkCollision = function ( x, y, radius) {
-        if ( obj.x < x + radius) { // right
-            if ( obj.x > x - radius) { // left
-                if ( obj.y < y + radius ) { // bottom
-                    if ( obj.y > y - radius ) { // top
-                        return true;
-                    }
-                }
-            }
-        }
-        else {
-            return false;
-        }
-    };
 
     obj.collisionWithHome = function () {
         obj.intensity = 1000;

@@ -17,6 +17,7 @@ function Ants() {
 
     const howManyAnts = 200;
     const ants = [];
+    const antSensitiveRadius = 20;
 
     const grid = Grid(canvasW, canvasH, sizeGrid, canvas);
 
@@ -61,7 +62,7 @@ function Ants() {
 
             // if ant has food -> find home
             // else find food
-            const nextPoint = grid.findBestPointInRadius(ant.x, ant.y, ant.hasFood);
+            const nextPoint = grid.findBestPointInRadius(ant.x, ant.y, antSensitiveRadius, ant.hasFood);
 
             ant.play(nextPoint);
 
