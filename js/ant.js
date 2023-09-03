@@ -10,7 +10,7 @@ function Ant(x, y, sizeAnts , canvas) {
 
     // after home or food  is detected -> intensity is 1000
     obj.intensity = 0;
-    const intensityFall = -1;
+    const intensityFall = -11;
 
 
     const ctx = canvas.getContext("2d");

@@ -10,13 +10,13 @@ function Ants() {
     const ctx = canvas.getContext("2d");
 
     const sizeAnts = 3;
-    const sizeHome = 30;
+    const sizeHome = 10;
     const sizeFood = 8;
     const sizeGrid = 2;
 
-    const howManyFood = 100;
-
+    const howManyFood = 1;
     const howManyAnts = 200;
+
     const ants = [];
     const antSensitiveRadius = 20;
 
@@ -35,7 +35,7 @@ function Ants() {
 
     // create food
     // for (let k = 0; k < howManyFood; k++) {
-        grid.addFood( 650/sizeGrid, 380/sizeGrid, sizeFood );
+        grid.addFood( 400/sizeGrid, 380/sizeGrid, sizeFood );
     //
     //     // var rx = getRandomInt( 10 , canvasW  - 10 ); // random x
     //     // var ry = getRandomInt( 10 , canvasH - 10 ); // random y
