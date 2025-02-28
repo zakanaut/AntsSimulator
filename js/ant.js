@@ -1,111 +1,126 @@
-function Ant(x, y, sizeAnts , canvas) {
-    const obj = {};
-    obj.x = x;
-    obj.y = y;
-    obj.dx = 0;
-    obj.dy = 0;
+import { CONFIG } from './config.js';
 
-    // got a piece of food or not
-    obj.hasFood  = false;
-
-    // after home or food  is detected -> intensity is 1000
-    obj.intensity = 0;
-    const intensityFall = -11;
-
-
-    const ctx = canvas.getContext("2d");
-    const ballRadius = sizeAnts;
-    const time = 10;// how many iter'ations until it changes its direction
-    let iter = 0 ;// counter of iterations
-    let angle = getRandomInt( 0 , 360 );
-    const speed = 1.5;
-    let lastNextPoint;
-    let skipNextPoint = false;
-
-    obj.play = function (nextPoint) {
-        //redraw
-        ctx.beginPath();
-        ctx.arc(obj.x, obj.y, ballRadius, 0, Math.PI*2);
-        // paint the ant depending on it's status
-        if ( obj.hasFood ) {
-            ctx.fillStyle = foodColor;
-        } else if ( obj.intensity > 0 ) {
-            ctx.fillStyle = homeColor;
+export class Ant {
+    constructor(x, y, size, canvas) {
+        this.x = x;
+        this.y = y;
+        this.dx = 0;
+        this.dy = 0;
+        this.hasFood = false;
+        this.intensity = 0;
+        this.leavePoint = false;
+        
+        this.ctx = canvas.getContext("2d");
+        this.canvas = canvas;
+        this.size = size;
+        
+        // Movement parameters
+        this.timeUntilDirectionChange = 10;
+        this.currentTime = 0;
+        this.angle = this.getRandomInt(0, 360);
+        this.speed = 1.5;
+        this.lastNextPoint = null;
+        this.skipNextPoint = false;
+        
+        // Constants
+        this.INTENSITY_FALL = -11;
+        this.DIRECTION_CHANGE = 25;
+    }
+    
+    play(nextPoint) {
+        this.draw();
+        this.updateMovement(nextPoint);
+        this.updatePosition(nextPoint);
+    }
+    
+    draw() {
+        this.ctx.beginPath();
+        this.ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        
+        if (this.hasFood) {
+            this.ctx.fillStyle = CONFIG.colors.food;
+        } else if (this.intensity > 0) {
+            this.ctx.fillStyle = CONFIG.colors.home;
         } else {
-            ctx.fillStyle = antColor;
+            this.ctx.fillStyle = CONFIG.colors.ant;
         }
-        ctx.fill();
-        ctx.closePath();
-
-        // if it did certain time of steps:
-        if (iter === time) {
-            iter = 0;
-
-            if ( obj.intensity > 0 ) {
-                obj.leavePoint = true;
-                obj.intensity += intensityFall;
+        
+        this.ctx.fill();
+        this.ctx.closePath();
+    }
+    
+    updateMovement(nextPoint) {
+        if (this.currentTime === this.timeUntilDirectionChange) {
+            this.currentTime = 0;
+            
+            if (this.intensity > 0) {
+                this.leavePoint = true;
+                this.intensity += this.INTENSITY_FALL;
             }
-
-            skipNextPoint = lastNextPoint?.intensity < nextPoint?.intensity;
-
-            // there is a chance that it will change it's path
-            const rand = Math.random();
-
-            if (nextPoint === undefined || skipNextPoint) {
-                if ( rand < 0.25 ) {
-                    angle += 25;
-                } else if ( rand > 0.75 ) {
-                    angle -= 25;
+            
+            this.skipNextPoint = this.lastNextPoint?.intensity < nextPoint?.intensity;
+            
+            if (nextPoint === undefined || this.skipNextPoint) {
+                const rand = Math.random();
+                if (rand < 0.25) {
+                    this.angle += this.DIRECTION_CHANGE;
+                } else if (rand > 0.75) {
+                    this.angle -= this.DIRECTION_CHANGE;
                 }
             }
         }
-
-        //detection if it goes beyond canvas border
-        if(obj.x + obj.dx < ballRadius) {
-            obj.x = canvas.width-ballRadius-10;
-        }
-        else if(obj.x + obj.dx > canvas.width-ballRadius) {
-            obj.x = ballRadius;
-        }
-
-        if(obj.y + obj.dy > canvas.height-ballRadius+2) {
-            obj.y = ballRadius;
-        }
-        else if ( obj.y + obj.dy < ballRadius-2) {
-            obj.y = canvas.height-ballRadius;
-        }
-
-        let radians;
-        // calculate next coordinates depending on direction angle
-        if (nextPoint !== undefined && !skipNextPoint) {
-            radians = calcAngleDegrees(nextPoint.x, nextPoint.y);
-        } else {
-            radians = degreesToRadians(angle);
-        }
-        obj.x = speed * Math.cos(radians) + obj.x;
-        obj.y = speed * Math.sin(radians) + obj.y;
-
-        iter += 1;
-        skipNextPoint = false;
-    };
-
-    function calcAngleDegrees(nextX, nextY) {
-        return Math.atan2( nextY - obj.y, nextX - obj.x);
+        
+        this.currentTime++;
     }
-
-    function degreesToRadians (degrees) {
-        return degrees * ( Math.PI / 180 );
+    
+    updatePosition(nextPoint) {
+        this.handleBoundaryCollision();
+        
+        const radians = (nextPoint !== undefined && !this.skipNextPoint)
+            ? this.calcAngleDegrees(nextPoint.x, nextPoint.y)
+            : this.degreesToRadians(this.angle);
+            
+        this.x = this.speed * Math.cos(radians) + this.x;
+        this.y = this.speed * Math.sin(radians) + this.y;
+        
+        this.skipNextPoint = false;
     }
-
-    obj.collisionWithHome = function () {
-        obj.intensity = 1000;
-        obj.hasFood = false;
+    
+    handleBoundaryCollision() {
+        if (this.x + this.dx < this.size) {
+            this.x = this.canvas.width - this.size - 10;
+        } else if (this.x + this.dx > this.canvas.width - this.size) {
+            this.x = this.size;
+        }
+        
+        if (this.y + this.dy > this.canvas.height - this.size + 2) {
+            this.y = this.size;
+        } else if (this.y + this.dy < this.size - 2) {
+            this.y = this.canvas.height - this.size;
+        }
     }
-
-    obj.collisionWithFood = function () {
-        obj.intensity = 1000;
-        obj.hasFood = true;
+    
+    calcAngleDegrees(nextX, nextY) {
+        return Math.atan2(nextY - this.y, nextX - this.x);
     }
-
-    return obj;
+    
+    degreesToRadians(degrees) {
+        return degrees * (Math.PI / 180);
+    }
+    
+    getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    
+    collisionWithHome() {
+        this.intensity = 1000;
+        this.hasFood = false;
+    }
+    
+    collisionWithFood() {
+        this.intensity = 1000;
+        this.hasFood = true;
+    }
 }

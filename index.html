@@ -9,14 +9,34 @@
     <link rel="icon" type="image/x-icon" href="/favicon.png">
 
     <title>Ants!!!</title>
+    <style>
+        .controls {
+            margin: 10px 0;
+        }
+        button {
+            padding: 8px 16px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .instruction {
+            margin-left: 15px;
+            font-style: italic;
+            color: #555;
+        }
+    </style>
 </head>
 <body>
     <div class="content">
         <h1>Ants colony simulation</h1>
+        
+        <div class="controls">
+            <button id="toggleSimulation">Pause</button>
+            <span class="instruction">Click on the canvas to add food sources</span>
+        </div>
 
         <canvas id="myCanvas" width="1400px" height="900px"></canvas>
     </div>
 
-    <script src="all.min.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html>
